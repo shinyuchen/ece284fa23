@@ -246,10 +246,7 @@ initial begin
 
 
   ////////// Accumulation /////////
-  acc_file = $fopen("acc_address.txt", "r");
-  out_file = $fopen("out.txt", "r");  /// out.txt file stores the address sequence to read out from psum memory for accumulation
-                                      /// This can be generated manually or in
-                                      /// pytorch automatically
+  out_file = $fopen("out.txt", "r");  
 
   // Following three lines are to remove the first three comment lines of the file
   out_scan_file = $fscanf(out_file,"%s", answer); 
