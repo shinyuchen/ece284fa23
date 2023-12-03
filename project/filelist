@@ -11,7 +11,7 @@
 ./sfp.v
 ./sfp_col.v
 ./sram_32b_w2048.v
-./sram_128b_w0248.v
+./sram_128b_w2048.v
 ./corelet.v
 ./core.v
 ./core_tb.v
