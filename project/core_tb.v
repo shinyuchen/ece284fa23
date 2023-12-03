@@ -343,7 +343,7 @@ initial begin
 
   ////////// 6. Accumulation /////////
   acc_file = $fopen("acc_address.txt", "r");
-  out_file = $fopen("psum.txt", "r");  /// out.txt file stores the address sequence to read out from psum memory for accumulation
+  out_file = $fopen("out.txt", "r");  /// out.txt file stores the address sequence to read out from psum memory for accumulation
                                       /// This can be generated manually or in
                                       /// pytorch automatically
 
