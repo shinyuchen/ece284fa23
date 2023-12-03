@@ -33,7 +33,7 @@ module l0 (clk, in, out, rd, wr, o_full, reset, o_ready);
          .o_empty(empty[i]),
          .o_full(full[i]),
 	 .in(in[(i+1)*bw-1:i*bw]),
-	 .out(out[(i+1)i*bw-1:i*bw]),
+	 .out(out[(i+1)*bw-1:i*bw]),
          .reset(reset));
   end
 
