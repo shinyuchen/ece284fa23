@@ -25,11 +25,11 @@ wire [col*psum_bw-1:0] pe_out_s;
 wire [col-1:0] pe_valid;
 wire [psum_bw*col-1:0] pe_in_n;
 wire [psum_bw*col-1:0] ofifo_in;
-wire [col-1:0] ofifo_wr;
+wire ofifo_wr;
 
 
 assign ofifo_in = pe_out_s;
-assign ofifo_wr = pe_valid;
+assign ofifo_wr = pe_valid[0];
 
 mac_array PE (.clk      (clk), 
               .reset    (reset), 
