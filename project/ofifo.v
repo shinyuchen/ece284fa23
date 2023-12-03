@@ -4,6 +4,7 @@ module ofifo (clk, in, out, rd, wr, o_full, reset, o_ready, o_valid);
 
   parameter col  = 8;
   parameter bw = 4;
+  parameter psum_bw = 16;
 
   input  clk;
   input  wr;
