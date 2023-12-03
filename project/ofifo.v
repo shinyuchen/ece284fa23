@@ -17,7 +17,7 @@ module ofifo (clk, in, out, rd, wr, o_full, reset, o_ready, o_valid);
 
   wire [col-1:0] empty;
   wire [col-1:0] full;
-  reg  wr_en;
+  reg  [col-1:0] wr_en;
   
   genvar i;
 
