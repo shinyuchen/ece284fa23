@@ -9,8 +9,8 @@ module ofifo (clk, in, out, rd, wr, o_full, reset, o_ready, o_valid);
   input  wr;
   input  rd;
   input  reset;
-  input  [col*bw-1:0] in;
-  output [col*bw-1:0] out;
+  input  [col*psum_bw-1:0] in;
+  output [col*psum_bw-1:0] out;
   output o_full;
   output o_ready;
   output o_valid;
@@ -26,15 +26,15 @@ module ofifo (clk, in, out, rd, wr, o_full, reset, o_ready, o_valid);
   assign o_valid = wr_en[col-1];
 
   for (i=0; i<col ; i=i+1) begin : col_num
-      fifo_depth64 #(.bw(bw)) fifo_instance (
+      fifo_depth64 #(.bw(psum_bw)) fifo_instance (
 	 .rd_clk(clk),
 	 .wr_clk(clk),
 	 .rd(rd),
 	 .wr(wr_en[i]),
          .o_empty(empty[i]),
          .o_full(full[i]),
-	 .in(in[(i+1)*bw-1:i*bw]),
-	 .out(out[(i+1)*bw-1:i*bw]),
+	 .in(in[(i+1)*psum_bw-1:i*psum_bw]),
+	 .out(out[(i+1)*psum_bw-1:i*psum_bw]),
          .reset(reset));
   end
 
