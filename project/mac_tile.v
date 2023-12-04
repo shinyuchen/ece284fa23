@@ -14,11 +14,11 @@ input  [psum_bw-1:0] in_n;
 input  clk;
 input  reset;
 
-reg [bw-1:0] a_q, b_q;
-reg [psum_bw-1:0] c_q;
+reg [bw-1:0] a, b, a_q, b_q;
+reg [psum_bw-1:0] c, c_q;
 wire [psum_bw-1:0] mac_out;
-reg load_ready_q;
-reg [1:0] inst_q;
+reg load_ready, load_ready_q;
+reg [1:0] inst, inst_q;
 
 assign out_e = a_q;
 assign inst_e = inst_q;
@@ -30,7 +30,14 @@ mac #(.bw(bw), .psum_bw(psum_bw)) mac_instance (
         .c(c_q),
 	.out(mac_out)
 ); 
-
+always @(*) begin
+        inst[1] = inst_w[1];
+        a = (inst_w) ? in_w : a_q;
+        b = (inst_w[0] && load_ready_q) ? in_w : b_q;
+        load_ready = (inst_w[0] && load_ready_q) ? 0 : load_ready_q;
+        inst[0] = (!load_ready_q) ? inst_w[0] : inst_q[0];
+        c = (inst_w[1]) ? in_n : c_q;
+end
 always @(posedge clk) begin
         if(reset) begin
                 a_q <= 0;
@@ -40,12 +47,11 @@ always @(posedge clk) begin
                 load_ready_q <= 1;
         end
         else begin
-                inst_q[1] <= inst_w[1];
-                a_q <= (inst_w) ? in_w : a_q;
-                b_q <= (inst_w[0] && load_ready_q) ? in_w : b_q;
-                load_ready_q <= (inst_w[0] && load_ready_q) ? 0 : load_ready_q;
-                inst_q[0] <= (!load_ready_q) ? inst_w[0] : inst_q[0];
-                c_q <= (inst_w[1]) ? in_n : c_q;
+                inst_q <= inst;
+                a_q <= a;
+                b_q <= b;
+                c_q <= c;
+                load_ready_q <= load_ready;
         end
 end
 
