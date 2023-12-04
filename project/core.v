@@ -31,7 +31,7 @@ module core (clk, inst, ofifo_valid, D_xmem, sfp_out, reset);
      .sfp_in(sfp_in), .sfp_i_valid(sfp_i_valid), .sfp_out(sfp_out), 
      .ofifo_o_valid(ofifo_o_valid), .ofifo_o_ready(ofifo_o_ready), 
      .ofifo_o_full(ofifo_o_full), .ofifo_out(ofifo_out), .ofifo_rd(ofifo_rd), 
-     .inst_q(inst_q)
+     .inst(inst_q)
     );
 
     sram_32b_w2048 data_SRAM (.CLK(clk), .D(D_xmem), .Q(l0_in), .CEN(inst_q[19]), .WEN(inst_q[18]), .A(inst_q[17:7])); 
