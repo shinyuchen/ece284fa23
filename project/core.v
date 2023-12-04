@@ -14,14 +14,11 @@ module core (clk, inst, ofifo_valid, D_xmem, sfp_out, reset);
     wire [psum_bw*col-1:0] ofifo_out;
     wire [psum_bw*col-1:0] sfp_in;
     wire sfp_i_valid;
-    reg [33:0] inst_q;
-    always @(posedge clk) begin
-        inst_q <= (reset) ? 0 : inst;
-    end
-    assign l0_rd = (inst_q[3] || inst_q[4]);
-    assign l0_wr = (inst_q[2] || inst_q[5]);
-    assign ofifo_rd = inst_q[6];
-    assign sfp_i_valid = inst_q[33];
+
+    assign l0_rd = (inst[3] || inst[4]);
+    assign l0_wr = (inst[2] || inst[5]);
+    assign ofifo_rd = inst[6];
+    assign sfp_i_valid = inst[33];
 
     assign ofifo_valid = ofifo_o_valid;
 
@@ -31,14 +28,14 @@ module core (clk, inst, ofifo_valid, D_xmem, sfp_out, reset);
      .sfp_in(sfp_in), .sfp_i_valid(sfp_i_valid), .sfp_out(sfp_out), 
      .ofifo_o_valid(ofifo_o_valid), .ofifo_o_ready(ofifo_o_ready), 
      .ofifo_o_full(ofifo_o_full), .ofifo_out(ofifo_out), .ofifo_rd(ofifo_rd), 
-     .inst(inst_q)
+     .inst(inst)
     );
 
-    sram_32b_w2048 data_SRAM (.CLK(clk), .D(D_xmem), .Q(l0_in), .CEN(inst_q[19]), .WEN(inst_q[18]), .A(inst_q[17:7])); 
+    sram_32b_w2048 data_SRAM (.CLK(clk), .D(D_xmem), .Q(l0_in), .CEN(inst[19]), .WEN(inst[18]), .A(inst[17:7])); 
 
     sram_128b_w2048 psum_SRAM (.CLK(clk), .D(ofifo_out), 
                                .Q(sfp_in), 
-                               .CEN(inst_q[32]), .WEN(inst_q[31]), .A(inst_q[30:20]));
+                               .CEN(inst[32]), .WEN(inst[31]), .A(inst[30:20]));
 
 
 
