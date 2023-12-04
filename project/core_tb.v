@@ -348,9 +348,9 @@ initial begin
                                       /// pytorch automatically
 
   // Following three lines are to remove the first three comment lines of the file
-  // out_scan_file = $fscanf(out_file,"%s", answer); 
-  // out_scan_file = $fscanf(out_file,"%s", answer); 
-  // out_scan_file = $fscanf(out_file,"%s", answer); 
+  out_scan_file = $fscanf(out_file,"%s", answer); 
+  out_scan_file = $fscanf(out_file,"%s", answer); 
+  out_scan_file = $fscanf(out_file,"%s", answer); 
 
   error = 0;
 
