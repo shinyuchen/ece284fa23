@@ -44,7 +44,7 @@ module l0 (clk, in, out, rd, wr, o_full, reset, o_ready);
    end
    else begin
       if(rd) rd_en <= {rd_en[row-2:0], 1'b1};
-      else rd_en <= rd_en >> 1'b1;
+      else rd_en <= {rd_en[row-2:0], 1'b0};
    end
   end
 
