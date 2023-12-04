@@ -5,7 +5,7 @@ parameter psum_bw = 16, row = 8;
 input clk, reset;
 input signed [psum_bw-1:0] in;
 input i_valid;
-output [psum_bw-1:0] out;
+output signed [psum_bw-1:0] out;
 
 reg signed [psum_bw-1:0] acc, acc_nxt;
 
