@@ -27,7 +27,7 @@ wire [psum_bw*col-1:0] pe_in_n;
 wire [psum_bw*col-1:0] ofifo_in;
 wire ofifo_wr;
 
-
+pe_in_n = 0;
 assign ofifo_in = pe_out_s;
 assign ofifo_wr = pe_valid[0];
 
