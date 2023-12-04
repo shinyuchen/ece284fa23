@@ -17,7 +17,6 @@ module l0 (clk, in, out, rd, wr, o_full, reset, o_ready);
   wire [row-1:0] empty;
   wire [row-1:0] full;
   reg [row-1:0] rd_en;
-  reg rd_q;
   
   genvar i;
 
@@ -42,11 +41,9 @@ module l0 (clk, in, out, rd, wr, o_full, reset, o_ready);
   always @ (posedge clk) begin
    if (reset) begin
       rd_en <= 8'b00000000;
-      rd_q <= 0;
    end
    else begin
-      rd_q <= rd;
-      if(rd_q) rd_en <= {rd_en[row-2:0], 1'b1};
+      if(rd) rd_en <= {rd_en[row-2:0], 1'b1};
       else rd_en <= rd_en >> 1'b1;
    end
   end

@@ -270,7 +270,7 @@ initial begin
 
 
     /////// 3. Activation data writing to L0 ///////
-    for (t=0; t<len_nij; t=t+1) begin  
+    for (t=0; t<len_nij+1; t=t+1) begin  
       #0.5 
         clk = 1'b0;  
         l0_wr = 1;
