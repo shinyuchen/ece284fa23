@@ -12,7 +12,7 @@ reg signed [psum_bw-1:0] acc, acc_nxt;
 always @(*) begin
     acc_nxt = (i_valid) ? acc + in : acc;
 end
-assign out = acc;
+assign out = (acc > 0) ? acc : 0;
 
 always @(posedge clk) begin
     if(reset) begin
