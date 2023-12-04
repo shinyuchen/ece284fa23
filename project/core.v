@@ -14,9 +14,9 @@ module core (clk, inst, ofifo_valid, D_xmem, sfp_out, reset);
     wire [psum_bw*col-1:0] ofifo_out;
     wire [psum_bw*col-1:0] sfp_in;
     wire sfp_i_valid;
-    reg [33:0] inst_q_q;
+    reg [33:0] inst_q;
     always @(posedge clk) begin
-        inst_q_q <= (reset) ? 0 : inst;
+        inst_q <= (reset) ? 0 : inst;
     end
     assign l0_rd = (inst_q[3] || inst_q[4]);
     assign l0_wr = (inst_q[2] || inst_q[5]);
