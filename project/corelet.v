@@ -30,13 +30,16 @@ wire ofifo_wr;
 assign pe_in_n = 0;
 assign ofifo_in = pe_out_s;
 assign ofifo_wr = pe_valid[0];
-
+reg [1:0] inst_q;
+always @(posedge clk) begin
+      inst_q <= (reset) ? 0 : inst[1:0];
+end
 mac_array PE (.clk      (clk), 
               .reset    (reset), 
               .out_s    (pe_out_s), 
               .in_w     (l0_out), 
               .in_n     (pe_in_n), 
-              .inst_w   (inst[1:0]), 
+              .inst_w   (inst_q[1:0]), 
               .valid    (pe_valid)
              );
 
