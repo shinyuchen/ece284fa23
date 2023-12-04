@@ -300,12 +300,12 @@ initial begin
         clk = 1'b1;
     end
 
-    // #0.5 
-    //   clk = 1'b0;  
-    //   l0_rd = 0;
-    //   execute = 0;
-    // #0.5 
-    //   clk = 1'b1; 
+    #0.5 
+      clk = 1'b0;  
+      l0_rd = 0;
+      execute = 0;
+    #0.5 
+      clk = 1'b1; 
     /////////////////////////////////////
 
     
@@ -319,7 +319,6 @@ initial begin
     for(t=0; t<len_nij; t=t+1) begin
       #0.5
         clk = 1'b0;
-        execute = 0;
         ofifo_rd = 1'b1;
         WEN_pmem = 0;
         CEN_pmem = 0;
