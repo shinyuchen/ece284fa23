@@ -253,7 +253,7 @@ initial begin
         ififo_rd = 1'b0;
       #0.5
         clk = 1'b1;
-    for(t=0; t<row+col; t=t+1) begin // refer to W4S2 P.15
+    for(t=0; t<row+col+10; t=t+1) begin // refer to W4S2 P.15
       #0.5 
         clk = 1'b0;
       #0.5
