@@ -139,7 +139,7 @@ initial begin
       x_scan_file = $fscanf(x_file,"%32b", D_xmem); 
       WEN_xmem = 0; 
       CEN_xmem = 0; 
-      if (t%2 == 0) A_xmem = A_xmem + 1;
+      if (t%2 == 0) A_xmem = t+1;
       if (t%2 == 1) A_xmem = t-1;
     #0.5 clk = 1'b1;   
   end
