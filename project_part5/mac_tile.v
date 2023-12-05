@@ -40,7 +40,7 @@ always @(*) begin
         b = (exe_counter_q && inst_w[1]) ? b1 : ((inst_w[1]) ? b2 : b_q);
         load_ready = (inst_w[0] && load_ready_q) ? load_ready_q-1 : load_ready_q;
         inst[0] = (load_ready_q == 2'b00) ? inst_w[0] : inst_q[0];
-        c = (!exe_counter_q && inst_w[1]) ? in_n : (inst_w[1] ? mac_out : c_q);
+        c = (exe_counter_q && inst_w[1]) ? in_n : (inst_w[1] ? mac_out : c_q);
         exe_counter = (inst_w[1]) ? exe_counter_q + 1 : exe_counter_q;
 end
 always @(posedge clk) begin
