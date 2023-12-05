@@ -16,7 +16,7 @@ input  reset;
 
 reg [bw-1:0] a, b, b1, b2, a_q, b_q, b1_q, b2_q;
 reg [psum_bw-1:0] c, c_q;
-wire [psum_bw-1:0] mac_out;
+reg [psum_bw-1:0] mac_out;
 reg [1:0] load_ready, load_ready_q;
 reg [1:0] inst, inst_q;
 reg [psum_bw-1:0] mac_out_q;
@@ -25,7 +25,7 @@ reg  exe_counter, exe_counter_q;
 assign out_e = a_q;
 assign inst_e = inst_q;
 // assign mac_out_q = mac_out;
-assign out_s = (inst_w[1] && (exe_counter_q == 0)) ? mac_out_q : 0;
+assign out_s = (inst_w[1] && (exe_counter_q == 0)) ? mac_out : 0;
 mac #(.bw(bw), .psum_bw(psum_bw)) mac_instance (
         .a(a_q), 
         .b(b_q),
