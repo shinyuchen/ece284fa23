@@ -218,7 +218,7 @@ initial begin
 
     /////// 1. Kernel data writing to L0 -> Use L0 to horizontally input weight into PEs ///////
     A_xmem = 11'b10000000000;
-    for (t=0; t<col; t=t+1) begin  
+    for (t=0; t<col+1; t=t+1) begin  
       #0.5 clk = 1'b0;  
         ififo_wr = 1'b1;
         WEN_xmem = 1;
@@ -240,7 +240,7 @@ initial begin
 
 
     /////// 2. Kernel loading to PEs -> sequentially inject weight values into PEs from L0///////
-    for(t=0; t<row+2*col; t=t+1) begin // refer to W4S2 P.15
+    for(t=0; t<col; t=t+1) begin // refer to W4S2 P.15
       #0.5 
         clk = 1'b0;
         ififo_rd = 1'b1;
@@ -248,23 +248,33 @@ initial begin
       #0.5
         clk = 1'b1;
     end
-
+    #0.5 
+        clk = 1'b0;
+        ififo_rd = 1'b0;
+      #0.5
+        clk = 1'b1;
+    for(t=0; t<row+col; t=t+1) begin // refer to W4S2 P.15
+      #0.5 
+        clk = 1'b0;
+      #0.5
+        clk = 1'b1;
+    end
     /////////////////////////////////////
   
 
 
     ////// provide some intermission to clear up the kernel loading ///
-    #0.5 
-      clk = 1'b0;  
-      load = 0; 
-      ififo_rd = 0;
-    #0.5 
-      clk = 1'b1;  
+    // #0.5 
+    //   clk = 1'b0;  
+    //   load = 0; 
+    //   ififo_rd = 0;
+    // #0.5 
+    //   clk = 1'b1;  
 
-    for (i=0; i<10 ; i=i+1) begin
-      #0.5 clk = 1'b0;
-      #0.5 clk = 1'b1;  
-    end
+    // for (i=0; i<10 ; i=i+1) begin
+    //   #0.5 clk = 1'b0;
+    //   #0.5 clk = 1'b1;  
+    // end
     /////////////////////////////////////
 
 
