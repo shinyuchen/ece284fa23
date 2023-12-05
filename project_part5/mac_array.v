@@ -73,8 +73,7 @@ module mac_array (clk, reset, out_s, in_w, in_n, inst_w, valid);
     // inst_exe_w_temp[6] <= inst_exe_w_temp[5];
     // inst_exe_w_temp[7] <= inst_exe_w_temp[6];
 
-    inst_exe_w_buffer[0] <= inst_w[1];
-    inst_exe_w_temp  [0] <= inst_exe_w_buffer[0];
+    inst_exe_w_temp  [0] <= inst_w[1];
     inst_exe_w_buffer[1] <= inst_exe_w_temp[0];
     inst_exe_w_temp  [1] <= inst_exe_w_buffer[1];
     inst_exe_w_buffer[2] <= inst_exe_w_temp[1];
