@@ -15,7 +15,7 @@ parameter len_nij = 36; // input = 6x6
 reg clk = 0;
 reg reset = 1;
 
-wire [35:0] inst_q; // explained in line 69 to 82
+wire [33:0] inst_q; // explained in line 69 to 82
 
 reg [1:0]  inst_w_q = 0; 
 reg [bw*row-1:0] D_xmem_q = 0; // input for memory storing x (weight & activation)
@@ -66,20 +66,20 @@ integer captured_data;
 integer t, i, j, k, kij;
 integer error;
 
-assign inst_q[35]     = acc_q;      // start to accumulate
-assign inst_q[34]     = CEN_pmem_q; // control psum (L1 scratch pad mem) read (to SFU for accumulation) (no write from tb DRAM)
-assign inst_q[33]     = WEN_pmem_q; // control psum (L1 scratch pad mem) read (to SFU for accumulation) (no write from tb DRAM)
-assign inst_q[32:22]  = A_pmem_q;   // control psum (L1 scratch pad mem) read (to SFU for accumulation) (no write from tb DRAM)
-assign inst_q[21]     = CEN_xmem_q; // control weight and activation read (from core SRAM to core ififo or L0) and write (from tb DRAM to core SRAM)
-assign inst_q[20]     = WEN_xmem_q; // control weight and activation read (from core SRAM to core ififo or L0) and write (from tb DRAM to core SRAM)
-assign inst_q[19:9]   = A_xmem_q;   // control weight and activation read (from core SRAM to core ififo or L0) and write (from tb DRAM to core SRAM)
-assign inst_q[8]      = ofifo_rd_q; // start to read ofifo and write to psum
-assign inst_q[7]      = ififo_wr_q; // control ififo read (ififo to PE) and write (from SRAM to ififo)
-assign inst_q[6]      = ififo_rd_q; // control ififo read (ififo to PE) and write (from SRAM to ififo)
-assign inst_q[5]      = l0_rd_q;    // control L0 read (L0 to PE)
-assign inst_q[4]      = l0_wr_q;    // control L0 write (from SRAM to L0)
-assign inst_q[3:2]      = execute_q;  // execute x*y+z
-assign inst_q[1:0]      = load_q;     // load values to x or y or z
+assign inst_q[33]     = acc_q;      // start to accumulate
+assign inst_q[32]     = CEN_pmem_q; // control psum (L1 scratch pad mem) read (to SFU for accumulation) (no write from tb DRAM)
+assign inst_q[31]     = WEN_pmem_q; // control psum (L1 scratch pad mem) read (to SFU for accumulation) (no write from tb DRAM)
+assign inst_q[30:20]  = A_pmem_q;   // control psum (L1 scratch pad mem) read (to SFU for accumulation) (no write from tb DRAM)
+assign inst_q[19]     = CEN_xmem_q; // control weight and activation read (from core SRAM to core ififo or L0) and write (from tb DRAM to core SRAM)
+assign inst_q[18]     = WEN_xmem_q; // control weight and activation read (from core SRAM to core ififo or L0) and write (from tb DRAM to core SRAM)
+assign inst_q[17:7]   = A_xmem_q;   // control weight and activation read (from core SRAM to core ififo or L0) and write (from tb DRAM to core SRAM)
+assign inst_q[6]      = ofifo_rd_q; // start to read ofifo and write to psum
+assign inst_q[5]      = ififo_wr_q; // control ififo read (ififo to PE) and write (from SRAM to ififo)
+assign inst_q[4]      = ififo_rd_q; // control ififo read (ififo to PE) and write (from SRAM to ififo)
+assign inst_q[3]      = l0_rd_q;    // control L0 read (L0 to PE)
+assign inst_q[2]      = l0_wr_q;    // control L0 write (from SRAM to L0)
+assign inst_q[1]      = execute_q;  // execute x*y+z
+assign inst_q[0]      = load_q;     // load values to x or y or z
 
 
 core  #(.bw(bw), .col(col), .row(row)) core_instance (
