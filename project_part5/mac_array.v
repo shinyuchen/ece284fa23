@@ -15,7 +15,9 @@ module mac_array (clk, reset, out_s, in_w, in_n, inst_w, valid);
   output [col-1:0] valid;
 
 
-  reg    [2*row-1:0] inst_w_temp;
+  // reg    [2*row-1:0] inst_w_temp;
+  reg    [row-1:0] inst_load_w_temp;
+  reg    [row-1:0] inst_exe_w_buffer, inst_exe_w_temp;
   wire   [psum_bw*col*(row+1)-1:0] temp;
   wire   [row*col-1:0] valid_temp;
   reg [col-1:0] valid_buffer, valid_buffer_nxt;
@@ -34,7 +36,7 @@ module mac_array (clk, reset, out_s, in_w, in_n, inst_w, valid);
          .clk(clk),
          .reset(reset),
 	 .in_w(in_w[bw*i-1:bw*(i-1)]),
-	 .inst_w(inst_w_temp[2*i-1:2*(i-1)]),
+	 .inst_w({inst_exe_w_temp[2*i-1:2*(i-1)], inst_load_w_temp[2*i-1:2*(i-1)]}),
 	 .in_n(temp[psum_bw*col*i-1:psum_bw*col*(i-1)]),
          .valid(valid_temp[col*i-1:col*(i-1)]),
 	 .out_s(temp[psum_bw*col*(i+1)-1:psum_bw*col*(i)]));
@@ -44,14 +46,41 @@ module mac_array (clk, reset, out_s, in_w, in_n, inst_w, valid);
 
 
     //valid <= valid_temp[row*col-1:row*col-8];
-    inst_w_temp[1:0]   <= inst_w; 
-    inst_w_temp[3:2]   <= inst_w_temp[1:0]; 
-    inst_w_temp[5:4]   <= inst_w_temp[3:2]; 
-    inst_w_temp[7:6]   <= inst_w_temp[5:4]; 
-    inst_w_temp[9:8]   <= inst_w_temp[7:6]; 
-    inst_w_temp[11:10] <= inst_w_temp[9:8]; 
-    inst_w_temp[13:12] <= inst_w_temp[11:10]; 
-    inst_w_temp[15:14] <= inst_w_temp[13:12]; 
+    // inst_w_temp[1:0]   <= inst_w; 
+    // inst_w_temp[3:2]   <= inst_w_temp[1:0]; 
+    // inst_w_temp[5:4]   <= inst_w_temp[3:2]; 
+    // inst_w_temp[7:6]   <= inst_w_temp[5:4]; 
+    // inst_w_temp[9:8]   <= inst_w_temp[7:6]; 
+    // inst_w_temp[11:10] <= inst_w_temp[9:8]; 
+    // inst_w_temp[13:12] <= inst_w_temp[11:10]; 
+    // inst_w_temp[15:14] <= inst_w_temp[13:12];
+
+    inst_load_w_temp[0] <= inst_w[0];
+    inst_load_w_temp[1] <= inst_load_w_temp[0];
+    inst_load_w_temp[2] <= inst_load_w_temp[1];
+    inst_load_w_temp[3] <= inst_load_w_temp[2];
+    inst_load_w_temp[4] <= inst_load_w_temp[3];
+    inst_load_w_temp[5] <= inst_load_w_temp[4];
+    inst_load_w_temp[6] <= inst_load_w_temp[5];
+    inst_load_w_temp[7] <= inst_load_w_temp[6];
+
+    inst_exe_w_buffer[0] <= inst_w[1];
+    inst_exe_w_temp  [0] <= inst_exe_w_buffer[0];
+    inst_exe_w_buffer[1] <= inst_load_w_temp[0];
+    inst_exe_w_temp  [1] <= inst_exe_w_buffer[1];
+    inst_exe_w_buffer[2] <= inst_load_w_temp[1];
+    inst_exe_w_temp  [2] <= inst_exe_w_buffer[2];
+    inst_exe_w_buffer[3] <= inst_load_w_temp[2];
+    inst_exe_w_temp  [3] <= inst_exe_w_buffer[3];
+    inst_exe_w_buffer[4] <= inst_load_w_temp[3];
+    inst_exe_w_temp  [4] <= inst_exe_w_buffer[4];
+    inst_exe_w_buffer[5] <= inst_load_w_temp[4];
+    inst_exe_w_temp  [5] <= inst_exe_w_buffer[5];
+    inst_exe_w_buffer[6] <= inst_load_w_temp[5];
+    inst_exe_w_temp  [6] <= inst_exe_w_buffer[6];
+    inst_exe_w_buffer[7] <= inst_load_w_temp[6];
+    inst_exe_w_temp  [7] <= inst_exe_w_buffer[7];
+
     valid_buffer <= valid_buffer_nxt;
   end
 
