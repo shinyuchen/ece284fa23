@@ -16,7 +16,7 @@ input  reset;
 
 reg [bw-1:0] a, b, b1, b2, a_q, b_q, b1_q, b2_q;
 reg [psum_bw-1:0] c, c_q;
-reg [psum_bw-1:0] mac_out;
+wire [psum_bw-1:0] mac_out;
 reg [1:0] load_ready, load_ready_q;
 reg [1:0] inst, inst_q;
 reg [psum_bw-1:0] mac_out_q;
