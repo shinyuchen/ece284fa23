@@ -40,7 +40,7 @@ reg execute_q = 0;
 reg load_q = 0;
 reg acc_q = 0;
 reg acc = 0;
-
+reg [10:0] F_xmem;
 reg [1:0]  inst_w; 
 reg [bw*row-1:0] D_xmem;
 reg [psum_bw*col-1:0] answer;
@@ -106,6 +106,7 @@ initial begin
   l0_wr    = 0;
   execute  = 0;
   load     = 0;
+  F_xmem   = 0;
 
   $dumpfile("core_tb.vcd");
   $dumpvars(0,core_tb);
@@ -196,16 +197,16 @@ initial begin
 
     /////// Kernel data writing to memory ///////
 
-    A_xmem = 11'b10000000000;
+    F_xmem = 11'b10000000000;
 
     for (t=0; t<2*col; t=t+1) begin  // 1 col each time
       #0.5 clk = 1'b0;  
         w_scan_file = $fscanf(w_file,"%32b", D_xmem); 
         WEN_xmem = 0;
         CEN_xmem = 0; 
-        if (t != 0 && t != col) A_xmem = A_xmem + 2; 
+        if (t % 2 == 0) A_xmem = F_xmem + t+1;
+        if (t % 2 == 1) A_xmem = F_xmem + t-1;
       #0.5 clk = 1'b1;  
-        if (t == col-1) A_xmem = 11'b10000000001;
     end
 
     #0.5 
