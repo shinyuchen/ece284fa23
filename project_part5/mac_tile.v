@@ -24,7 +24,7 @@ reg  exe_counter, exe_counter_q;
 
 assign out_e = a_q;
 assign inst_e = inst_q;
-assign mac_out_q = mac_out;
+// assign mac_out_q = mac_out;
 assign out_s = (inst_w[1] && (exe_counter_q == 0)) ? mac_out_q : 0;
 mac #(.bw(bw), .psum_bw(psum_bw)) mac_instance (
         .a(a_q), 
@@ -41,7 +41,7 @@ always @(*) begin
         load_ready[0] = (inst_w[0] && load_ready_q[0]) ? 0 : load_ready_q[0];
         load_ready[1] = (inst_w[0] && load_ready_q[1]) ? 0 : load_ready_q[1];
         inst[0] = (load_ready_q == 2'b00) ? inst_w[0] : inst_q[0];
-        c = (exe_counter_q && inst_w[1]) ? in_n : (inst_w[1] ? mac_out_q : c_q);
+        c = (exe_counter_q && inst_w[1]) ? in_n : (inst_w[1] ? mac_out : c_q);
         exe_counter = (inst_w[1]) ? exe_counter_q + 1 : exe_counter_q;
 end
 always @(posedge clk) begin
