@@ -315,6 +315,11 @@ initial begin
     /////////////////////////////////////
 
     /////// 4. Execution ///////
+    #0.5
+      clk = 1'b0;
+      l0_rd = 1;
+    #0.5
+      clk = 1'b1;
     for (t=0; t<len_nij+row+col; t=t+1) begin
       #0.5
         clk = 1'b0;
