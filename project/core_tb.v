@@ -218,7 +218,7 @@ initial begin
 
     /////// 1. Kernel data writing to L0 -> Use L0 to horizontally input weight into PEs ///////
     A_xmem = 11'b10000000000;
-    for (t=0; t<col+1; t=t+1) begin  
+    for (t=0; t<col+2; t=t+1) begin  
       #0.5 clk = 1'b0;  
         ififo_wr = 1'b1;
         WEN_xmem = 1;
