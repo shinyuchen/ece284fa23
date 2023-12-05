@@ -218,13 +218,9 @@ initial begin
 
     /////// 1. Kernel data writing to L0 -> Use L0 to horizontally input weight into PEs ///////
     A_xmem = 11'b10000000000;
-    #0.5 
-      clk = 1'b0;  
-      ififo_wr = 1'b1;
-    #0.5 
-      clk = 1'b1;  
-    for (t=0; t<col; t=t+1) begin  
+    for (t=0; t<col+1; t=t+1) begin  
       #0.5 clk = 1'b0;  
+        ififo_wr = 1'b1;
         WEN_xmem = 1;
         CEN_xmem = 0; 
         if (t>0) A_xmem = A_xmem + 1; 
@@ -249,14 +245,19 @@ initial begin
       ififo_rd = 1'b1;
     #0.5
       clk = 1'b1;
-    for(t=0; t<row+2*col; t=t+1) begin // refer to W4S2 P.15
+    for(t=0; t<row+2*col-1; t=t+1) begin // refer to W4S2 P.15
       #0.5 
         clk = 1'b0;
-        // ififo_rd = 1'b1;
+        ififo_rd = 1'b1;
         load = 1'b1;
       #0.5
         clk = 1'b1;
     end
+    #0.5 
+      clk = 1'b0;
+      ififo_rd = 1'b0;
+    #0.5
+      clk = 1'b1;
     // 0.5 
     //     clk = 1'b0;
     //     ififo_rd = 1'b0;
@@ -320,7 +321,7 @@ initial begin
       l0_rd = 1;
     #0.5
       clk = 1'b1;
-    for (t=0; t<len_nij+row+col; t=t+1) begin
+    for (t=0; t<len_nij+row+col-1; t=t+1) begin
       #0.5
         clk = 1'b0;
         l0_rd = 1;
@@ -328,6 +329,11 @@ initial begin
       #0.5
         clk = 1'b1;
     end
+    #0.5
+      clk = 1'b0;
+      l0_rd = 0;
+    #0.5
+      clk = 1'b1;
 
     #0.5 
       clk = 1'b0;  
