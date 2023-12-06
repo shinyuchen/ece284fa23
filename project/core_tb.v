@@ -15,7 +15,7 @@ parameter len_nij = 36; // input = 6x6
 reg clk = 0;
 reg reset = 1;
 
-wire [33:0] inst_q; // explained in line 69 to 82
+wire [46:0] inst_q; // explained in line 69 to 82
 
 reg [1:0]  inst_w_q = 0; 
 reg [bw*row-1:0] D_xmem_q = 0, D_wmem_q = 0; // input for memory storing x (weight & activation)
