@@ -456,7 +456,7 @@ initial begin
     // Ideally, OFIFO should be read while execution, but we have enough ofifo
     // depth so we can fetch out after execution.
     // A_pmem = len_nij*kij;
-    for(t=0; t<13; t=t+1) begin
+    for(t=1; t<14; t=t+1) begin
       #0.5
         clk = 1'b0;
         ofifo_rd = 1'b1;
