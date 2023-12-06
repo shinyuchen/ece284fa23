@@ -18,13 +18,15 @@ reg reset = 1;
 wire [33:0] inst_q; // explained in line 69 to 82
 
 reg [1:0]  inst_w_q = 0; 
-reg [bw*row-1:0] D_xmem_q = 0; // input for memory storing x (weight & activation)
-reg CEN_xmem = 1; // clock enable neg for L0
-reg WEN_xmem = 1; // write_neg for L0, otherwise read
-reg [10:0] A_xmem = 0; // address of memory for x (weight & activation)
-reg CEN_xmem_q = 1;
-reg WEN_xmem_q = 1;
+reg [bw*row-1:0] D_xmem_q = 0, D_wmem_q = 0; // input for memory storing x (weight & activation)
+reg CEN_xmem = 1, CEN_wmem = 1; // clock enable neg for L0
+reg WEN_xmem = 1, WEN_wmem = 1; // write_neg for L0, otherwise read
+reg [10:0] A_xmem = 0, 
+reg [10:0] A_wmem = 0; // address of memory for x (weight & activation)
+reg CEN_xmem_q = 1, CEN_wmem_q = 1;
+reg WEN_xmem_q = 1, WEN_wmem_q = 1;
 reg [10:0] A_xmem_q = 0; 
+reg [10:0] A_wmem_q = 0;
 reg CEN_pmem = 1;
 reg WEN_pmem = 1;
 reg [10:0] A_pmem = 0; // address of memory for psum
@@ -66,6 +68,9 @@ integer captured_data;
 integer t, i, j, k, kij;
 integer error;
 
+assign inst_q[46]     = CEN_wmem_q; // control weight and activation read (from core SRAM to core ififo or L0) and write (from tb DRAM to core SRAM)
+assign inst_q[45]     = WEN_wmem_q; // control weight and activation read (from core SRAM to core ififo or L0) and write (from tb DRAM to core SRAM)
+assign inst_q[44:34]  = A_wmem_q;  
 assign inst_q[33]     = acc_q;      // start to accumulate
 assign inst_q[32]     = CEN_pmem_q; // control psum (L1 scratch pad mem) read (to SFU for accumulation) (no write from tb DRAM)
 assign inst_q[31]     = WEN_pmem_q; // control psum (L1 scratch pad mem) read (to SFU for accumulation) (no write from tb DRAM)
@@ -87,6 +92,7 @@ core  #(.bw(bw), .col(col), .row(row)) core_instance (
 	.inst         (inst_q),
 	.ofifo_valid  (ofifo_valid),
   .D_xmem       (D_xmem_q), 
+  .D_wmem       (D_wmem_q),
   .sfp_out      (sfp_out), 
 	.reset        (reset)
 ); 
@@ -99,6 +105,10 @@ initial begin
   CEN_xmem = 1;
   WEN_xmem = 1;
   A_xmem   = 0;
+  D_wmem   = 0;
+  CEN_wmem = 1;
+  WEN_wmem = 1;
+  A_wmem   = 0;
   ofifo_rd = 0;
   ififo_wr = 0;
   ififo_rd = 0;
@@ -133,24 +143,24 @@ initial begin
   /////////////////////////
 
   /////// Activation data writing to memory ///////
-  for (t=0; t<len_nij; t=t+1) begin  
-    #0.5 
-      clk = 1'b0;  
-      x_scan_file = $fscanf(x_file,"%32b", D_xmem); 
-      WEN_xmem = 0; 
-      CEN_xmem = 0; 
-      if (t>0) A_xmem = A_xmem + 1;
-    #0.5 clk = 1'b1;   
-  end
+  // for (t=0; t<len_nij; t=t+1) begin  
+  //   #0.5 
+  //     clk = 1'b0;  
+  //     x_scan_file = $fscanf(x_file,"%32b", D_xmem); 
+  //     WEN_xmem = 0; 
+  //     CEN_xmem = 0; 
+  //     if (t>0) A_xmem = A_xmem + 1;
+  //   #0.5 clk = 1'b1;   
+  // end
 
-  #0.5 
-    clk = 1'b0;  
-    WEN_xmem = 1;  
-    CEN_xmem = 1; 
-    A_xmem = 0;
-  #0.5 clk = 1'b1; 
+  // #0.5 
+  //   clk = 1'b0;  
+  //   WEN_xmem = 1;  
+  //   CEN_xmem = 1; 
+  //   A_xmem = 0;
+  // #0.5 clk = 1'b1; 
 
-  $fclose(x_file);
+  // $fclose(x_file);
   /////////////////////////////////////////////////
 
 
@@ -195,49 +205,81 @@ initial begin
 
     /////// Kernel data writing to memory ///////
 
-    A_xmem = 11'b10000000000;
+    A_wmem = 11'b00000000000;
 
     for (t=0; t<col; t=t+1) begin  // 1 col each time
       #0.5 clk = 1'b0;  
-        w_scan_file = $fscanf(w_file,"%32b", D_xmem); 
-        WEN_xmem = 0;
-        CEN_xmem = 0; 
-        if (t>0) A_xmem = A_xmem + 1; 
+        w_scan_file = $fscanf(w_file,"%32b", D_wmem); 
+        WEN_wmem = 0;
+        CEN_wmem = 0; 
+        if (t>0) A_wmem = A_wmem + 1; 
+        if(kij == 0) begin
+          x_scan_file = $fscanf(x_file,"%32b", D_xmem); 
+          WEN_xmem = 0; 
+          CEN_xmem = 0; 
+          if (t>0) A_xmem = A_xmem + 1;
+        end
       #0.5 clk = 1'b1;  
     end
 
     #0.5 
       clk = 1'b0;  
-      WEN_xmem = 1;  
-      CEN_xmem = 1; 
-      A_xmem = 0;
+      WEN_wmem = 1;  
+      CEN_wmem = 1; 
+      A_wmem = 0;
+      if(kij == 0) begin
+        x_scan_file = $fscanf(x_file,"%32b", D_xmem); 
+        WEN_xmem = 0; 
+        CEN_xmem = 0; 
+        A_xmem = A_xmem + 1;
+      end
     #0.5 clk = 1'b1; 
     /////////////////////////////////////
 
 
 
     /////// 1. Kernel data writing to L0 -> Use L0 to horizontally input weight into PEs ///////
-    A_xmem = 11'b10000000000;
+    A_wmem = 11'b00000000000;
     #0.5 clk = 1'b0;  
       ififo_wr = 1'b1;
-      WEN_xmem = 1;
-      CEN_xmem = 0; 
+      WEN_wmem = 1;
+      CEN_wmem = 0; 
+      if(kij == 0) begin
+        x_scan_file = $fscanf(x_file,"%32b", D_xmem); 
+        WEN_xmem = 0; 
+        CEN_xmem = 0; 
+        A_xmem = A_xmem + 1;
+      end
     #0.5 clk = 1'b1;  
+
     for (t=1; t<col+1; t=t+1) begin  
       #0.5 clk = 1'b0;  
         ififo_wr = 1'b1;
-        WEN_xmem = 1;
-        CEN_xmem = 0; 
-        if (t>0) A_xmem = A_xmem + 1; 
+        WEN_wmem = 1;
+        CEN_wmem = 0; 
+        if (t>0) A_wmem = A_wmem + 1; 
+        if(kij == 0) begin
+          x_scan_file = $fscanf(x_file,"%32b", D_xmem); 
+          WEN_xmem = 0; 
+          CEN_xmem = 0; 
+          A_xmem = A_xmem + 1;
+        end
+
       #0.5 clk = 1'b1;  
     end
 
     #0.5 
       clk = 1'b0;  
       ififo_wr = 1'b0;
-      WEN_xmem = 1;  
-      CEN_xmem = 1; 
-      A_xmem = 0;
+      WEN_wmem = 1;  
+      CEN_wmem = 1; 
+      A_wmem = 0;
+      if(kij == 0) begin
+        x_scan_file = $fscanf(x_file,"%32b", D_xmem); 
+        WEN_xmem = 0; 
+        CEN_xmem = 0; 
+        A_xmem = A_xmem + 1;
+      end
     #0.5 
       clk = 1'b1; 
     /////////////////////////////////////
@@ -248,6 +290,13 @@ initial begin
     #0.5 
       clk = 1'b0;
       ififo_rd = 1'b1;
+      if(kij == 0) begin
+        x_scan_file = $fscanf(x_file,"%32b", D_xmem); 
+        WEN_xmem = 0; 
+        CEN_xmem = 0; 
+        A_xmem = A_xmem + 1;
+      end
+    
     #0.5
       clk = 1'b1;
     for(t=0; t<row+2*col-1; t=t+1) begin // refer to W4S2 P.15
@@ -255,8 +304,21 @@ initial begin
         clk = 1'b0;
         ififo_rd = 1'b1;
         load = 1'b1;
+        if(kij == 0 && t<16) begin
+          x_scan_file = $fscanf(x_file,"%32b", D_xmem); 
+          WEN_xmem = 0; 
+          CEN_xmem = 0; 
+          A_xmem = A_xmem + 1;
+        end
+
       #0.5
         clk = 1'b1;
+        if(kij == 0 && t==16) begin
+          WEN_xmem = 1;  
+          CEN_xmem = 1; 
+          A_xmem = 0;
+          $fclose(x_file);
+        end
     end
     #0.5 
       clk = 1'b0;
