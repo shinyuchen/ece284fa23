@@ -254,10 +254,12 @@ initial begin
       end
 
     #0.5 clk = 1'b1;  
+    
     #0.5 clk = 1'b0;  
       ififo_wr = 1'b1;
       WEN_wmem = 1;
       CEN_wmem = 0; 
+      A_wmem = A_wmem + 1;
       if(kij == 0) begin
         x_scan_file = $fscanf(x_file,"%32b", D_xmem); 
         WEN_xmem = 0; 
