@@ -18,7 +18,7 @@ input [psum_bw*col-1:0] sfp_in;
 input sfp_i_valid;
 output [psum_bw*col-1:0] sfp_out;
 
-input [33:0] inst;
+input [1:0] inst;
 
 wire [row*bw-1:0] l0_out;
 wire [col*psum_bw-1:0] pe_out_s;
@@ -39,7 +39,7 @@ mac_array PE (.clk      (clk),
               .out_s    (pe_out_s), 
               .in_w     (l0_out), 
               .in_n     (pe_in_n), 
-              .inst_w   (inst[1:0]), 
+              .inst_w   (inst), 
               .valid    (pe_valid)
              );
 
