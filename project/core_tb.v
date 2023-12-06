@@ -44,7 +44,7 @@ reg acc_q = 0;
 reg acc = 0;
 
 reg [1:0]  inst_w; 
-reg [bw*row-1:0] D_xmem;
+reg [bw*row-1:0] D_xmem, D_wmem;
 reg [psum_bw*col-1:0] answer;
 
 
