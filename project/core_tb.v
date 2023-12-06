@@ -254,7 +254,19 @@ initial begin
       end
 
     #0.5 clk = 1'b1;  
-    for (t=1; t<col+1; t=t+1) begin  
+    #0.5 clk = 1'b0;  
+      ififo_wr = 1'b1;
+      WEN_wmem = 1;
+      CEN_wmem = 0; 
+      if(kij == 0) begin
+        x_scan_file = $fscanf(x_file,"%32b", D_xmem); 
+        WEN_xmem = 0; 
+        CEN_xmem = 0; 
+        A_xmem = A_xmem + 1;
+      end
+
+    #0.5 clk = 1'b1;
+    for (t=2; t<col+1; t=t+1) begin  
       #0.5 clk = 1'b0;  
         ififo_wr = 1'b1;
         WEN_wmem = 1;
