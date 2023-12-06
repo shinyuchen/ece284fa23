@@ -27,7 +27,7 @@ module ofifo (clk, in, out, rd, wr, o_full, reset, o_ready, o_valid);
   assign o_valid = wr_en[col-1];
 
   for (i=0; i<col ; i=i+1) begin : col_num
-      fifo #(.WIDTH(psum_bw), .DEPTH(10)) fifo_instance (
+      fifo #(.WIDTH(psum_bw), .DEPTH(14)) fifo_instance (
 	 .r_clk(clk),
 	 .w_clk(clk),
 	 .i_read(rd),
