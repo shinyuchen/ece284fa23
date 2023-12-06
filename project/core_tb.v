@@ -214,7 +214,6 @@ initial begin
         w_scan_file = $fscanf(w_file,"%32b", D_wmem); 
         WEN_wmem = 0;
         CEN_wmem = 0; 
-        $display("D_wmem = %h\n", D_wmem);
         if (t>0) A_wmem = A_wmem + 1; 
         if(kij == 0) begin
           x_scan_file = $fscanf(x_file,"%32b", D_xmem); 
