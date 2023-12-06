@@ -400,11 +400,15 @@ initial begin
       l0_rd = 1;
       A_xmem = A_xmem + 1;
     #0.5 clk = 1'b1;  
+    #0.5 
+      clk = 1'b0;  
+      execute = 1;
+      A_xmem = A_xmem + 1;
+    #0.5 clk = 1'b1;  
 
-    for (t=2; t<len_nij+1; t=t+1) begin  
+    for (t=3; t<len_nij+1; t=t+1) begin  
       #0.5 
         clk = 1'b0;  
-        execute = 1;
         if (t>0) A_xmem = A_xmem + 1;
       #0.5 clk = 1'b1;   
     end
@@ -448,7 +452,7 @@ initial begin
     //////// 5. OFIFO READ ////////
     // Ideally, OFIFO should be read while execution, but we have enough ofifo
     // depth so we can fetch out after execution.
-    A_pmem = len_nij*kij;
+    A_pmem = len_nij * kij;
     for(t=0; t<len_nij; t=t+1) begin
       #0.5
         clk = 1'b0;
