@@ -21,7 +21,7 @@ reg [1:0]  inst_w_q = 0;
 reg [bw*row-1:0] D_xmem_q = 0, D_wmem_q = 0; // input for memory storing x (weight & activation)
 reg CEN_xmem = 1, CEN_wmem = 1; // clock enable neg for L0
 reg WEN_xmem = 1, WEN_wmem = 1; // write_neg for L0, otherwise read
-reg [10:0] A_xmem = 0, 
+reg [10:0] A_xmem = 0;
 reg [10:0] A_wmem = 0; // address of memory for x (weight & activation)
 reg CEN_xmem_q = 1, CEN_wmem_q = 1;
 reg WEN_xmem_q = 1, WEN_wmem_q = 1;
