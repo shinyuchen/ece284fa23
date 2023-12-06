@@ -68,16 +68,16 @@ integer captured_data;
 integer t, i, j, k, kij;
 integer error;
 
-assign inst_q[46]     = CEN_wmem_q; // control weight and activation read (from core SRAM to core ififo or L0) and write (from tb DRAM to core SRAM)
-assign inst_q[45]     = WEN_wmem_q; // control weight and activation read (from core SRAM to core ififo or L0) and write (from tb DRAM to core SRAM)
-assign inst_q[44:34]  = A_wmem_q;  
+assign inst_q[46]     = CEN_xmem_q; // control weight and activation read (from core SRAM to core ififo or L0) and write (from tb DRAM to core SRAM)
+assign inst_q[45]     = WEN_xmem_q; // control weight and activation read (from core SRAM to core ififo or L0) and write (from tb DRAM to core SRAM)
+assign inst_q[44:34]  = A_xmem_q;  
 assign inst_q[33]     = acc_q;      // start to accumulate
 assign inst_q[32]     = CEN_pmem_q; // control psum (L1 scratch pad mem) read (to SFU for accumulation) (no write from tb DRAM)
 assign inst_q[31]     = WEN_pmem_q; // control psum (L1 scratch pad mem) read (to SFU for accumulation) (no write from tb DRAM)
 assign inst_q[30:20]  = A_pmem_q;   // control psum (L1 scratch pad mem) read (to SFU for accumulation) (no write from tb DRAM)
-assign inst_q[19]     = CEN_xmem_q; // control weight and activation read (from core SRAM to core ififo or L0) and write (from tb DRAM to core SRAM)
-assign inst_q[18]     = WEN_xmem_q; // control weight and activation read (from core SRAM to core ififo or L0) and write (from tb DRAM to core SRAM)
-assign inst_q[17:7]   = A_xmem_q;   // control weight and activation read (from core SRAM to core ififo or L0) and write (from tb DRAM to core SRAM)
+assign inst_q[19]     = CEN_wmem_q; // control weight and activation read (from core SRAM to core ififo or L0) and write (from tb DRAM to core SRAM)
+assign inst_q[18]     = WEN_wmem_q; // control weight and activation read (from core SRAM to core ififo or L0) and write (from tb DRAM to core SRAM)
+assign inst_q[17:7]   = A_wmem_q;   // control weight and activation read (from core SRAM to core ififo or L0) and write (from tb DRAM to core SRAM)
 assign inst_q[6]      = ofifo_rd_q; // start to read ofifo and write to psum
 assign inst_q[5]      = ififo_wr_q; // control ififo read (ififo to PE) and write (from SRAM to ififo)
 assign inst_q[4]      = ififo_rd_q; // control ififo read (ififo to PE) and write (from SRAM to ififo)
