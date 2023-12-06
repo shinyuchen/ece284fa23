@@ -407,11 +407,11 @@ initial begin
         clk = 1'b0;  
         execute = 1;
         if (t>0) A_xmem = A_xmem + 1;
-        if (t>= 2+row+2*col) begin
-          ofifo_rd = 1'b1;
-          WEN_pmem = 0;
-          CEN_pmem = 0;
-          if(t > 2+row+2*col) A_pmem = A_pmem+1;
+        // if (t>= 2+row+2*col) begin
+        //   ofifo_rd = 1'b1;
+        //   WEN_pmem = 0;
+        //   CEN_pmem = 0;
+        //   if(t > 2+row+2*col) A_pmem = A_pmem+1;
         end
       #0.5 clk = 1'b1;   
     end
@@ -456,7 +456,7 @@ initial begin
     // Ideally, OFIFO should be read while execution, but we have enough ofifo
     // depth so we can fetch out after execution.
     // A_pmem = len_nij*kij;
-    for(t=1; t<14; t=t+1) begin
+    for(t=1; t<len_nij; t=t+1) begin
       #0.5
         clk = 1'b0;
         ofifo_rd = 1'b1;
