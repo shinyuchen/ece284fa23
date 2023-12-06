@@ -532,10 +532,14 @@ always @ (posedge clk) begin
    D_xmem_q   <= D_xmem;
    CEN_xmem_q <= CEN_xmem;
    WEN_xmem_q <= WEN_xmem;
+   D_wmem_q   <= D_wmem;
+   CEN_wmem_q <= CEN_wmem;
+   WEN_wmem_q <= WEN_wmem;
    A_pmem_q   <= A_pmem;
    CEN_pmem_q <= CEN_pmem;
    WEN_pmem_q <= WEN_pmem;
    A_xmem_q   <= A_xmem;
+   A_wmem_q   <= A_wmem;
    ofifo_rd_q <= ofifo_rd;
    acc_q      <= acc;
    ififo_wr_q <= ififo_wr;
