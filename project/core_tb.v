@@ -401,11 +401,16 @@ initial begin
       A_xmem = A_xmem + 1;
       A_pmem = len_nij*kij;
     #0.5 clk = 1'b1;  
+    #0.5 
+      clk = 1'b0;  
+      execute = 1;
+      A_xmem = A_xmem + 1;
+    #0.5 clk = 1'b1;  
 
-    for (t=2; t<len_nij+1; t=t+1) begin  
+
+    for (t=3; t<len_nij+1; t=t+1) begin  
       #0.5 
         clk = 1'b0;  
-        execute = 1;
         if (t>0) A_xmem = A_xmem + 1;
       #0.5 clk = 1'b1;   
     end
