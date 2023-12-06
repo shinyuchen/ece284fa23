@@ -34,8 +34,8 @@ module core (clk, inst, ofifo_valid, D_xmem, D_wmem, sfp_out, reset);
      .inst(inst)
     );
 
-    sram_32b_w2048 weight_SRAM (.CLK(clk), .D(D_wmem), .Q(l0_in), .CEN(inst[19]), .WEN(inst[18]), .A(inst[17:7])); 
-    sram_32b_w2048 act_SRAM (.CLK(clk), .D(D_xmem), .Q(l0_in), .CEN(inst[46]), .WEN(inst[45]), .A(inst[44:34])); 
+    sram_32b_w2048 weight_SRAM (.CLK(clk), .D(D_wmem), .Q(weight_SRAM_out), .CEN(inst[19]), .WEN(inst[18]), .A(inst[17:7])); 
+    sram_32b_w2048 act_SRAM (.CLK(clk), .D(D_xmem), .Q(act_SRAM_out), .CEN(inst[46]), .WEN(inst[45]), .A(inst[44:34])); 
     sram_128b_w2048 psum_SRAM (.CLK(clk), .D(ofifo_out), 
                                .Q(sfp_in), 
                                .CEN(inst[32]), .WEN(inst[31]), .A(inst[30:20]));
