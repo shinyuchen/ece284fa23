@@ -256,7 +256,7 @@ initial begin
     #0.5 clk = 1'b1;  
     
     #0.5 clk = 1'b0;  
-      ififo_wr = 1'b1;
+      ififo_rd = 1'b1;
       WEN_wmem = 1;
       CEN_wmem = 0; 
       A_wmem = A_wmem + 1;
@@ -271,6 +271,7 @@ initial begin
     for (t=2; t<col+1; t=t+1) begin  
       #0.5 clk = 1'b0;  
         ififo_wr = 1'b1;
+        load = 1'b1;
         WEN_wmem = 1;
         CEN_wmem = 0; 
         if (t>0) A_wmem = A_wmem + 1; 
@@ -303,24 +304,11 @@ initial begin
 
 
     /////// 2. Kernel loading to PEs -> sequentially inject weight values into PEs from L0///////
-    #0.5 
-      clk = 1'b0;
-      ififo_rd = 1'b1;
-      if(kij == 0) begin
-        x_scan_file = $fscanf(x_file,"%32b", D_xmem); 
-        WEN_xmem = 0; 
-        CEN_xmem = 0; 
-        A_xmem = A_xmem + 1;
-      end
-    
-    #0.5
-      clk = 1'b1;
-    for(t=0; t<row+2*col-1; t=t+1) begin // refer to W4S2 P.15
+
+    for(t=0; t<row+col-1; t=t+1) begin // refer to W4S2 P.15
       #0.5 
         clk = 1'b0;
-        ififo_rd = 1'b1;
-        load = 1'b1;
-        if(kij == 0 && t<16) begin
+        if(kij == 0) begin
           x_scan_file = $fscanf(x_file,"%32b", D_xmem); 
           WEN_xmem = 0; 
           CEN_xmem = 0; 
@@ -329,16 +317,17 @@ initial begin
 
       #0.5
         clk = 1'b1;
-        if(kij == 0 && t==16) begin
+        
+    end
+    #0.5 
+      clk = 1'b0;
+      ififo_rd = 1'b0;
+      if(kij == 0) begin
           WEN_xmem = 1;  
           CEN_xmem = 1; 
           A_xmem = 0;
           $fclose(x_file);
         end
-    end
-    #0.5 
-      clk = 1'b0;
-      ififo_rd = 1'b0;
     #0.5
       clk = 1'b1;
     // 0.5 
