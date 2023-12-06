@@ -323,11 +323,18 @@ initial begin
       clk = 1'b0;
       ififo_rd = 1'b0;
       if(kij == 0) begin
-          WEN_xmem = 1;  
-          CEN_xmem = 1; 
-          A_xmem = 0;
-          $fclose(x_file);
-        end
+        x_scan_file = $fscanf(x_file,"%32b", D_xmem); 
+        WEN_xmem = 0; 
+        CEN_xmem = 0; 
+        A_xmem = A_xmem + 1;
+      end
+      // if(kij == 0) begin
+      //     WEN_xmem = 1;  
+      //     CEN_xmem = 1; 
+      //     A_xmem = 0;
+      //     $fclose(x_file);
+      //  end
+
     #0.5
       clk = 1'b1;
     // 0.5 
@@ -355,9 +362,24 @@ initial begin
       clk = 1'b0;  
       load = 0; 
       ififo_rd = 0;
+      if(kij == 0) begin
+        x_scan_file = $fscanf(x_file,"%32b", D_xmem); 
+        WEN_xmem = 0; 
+        CEN_xmem = 0; 
+        A_xmem = A_xmem + 1;
+      end
     #0.5 
       clk = 1'b1;  
-
+    #0.5 
+      clk = 1'b0;
+      if(kij == 0) begin
+        WEN_xmem = 1;  
+        CEN_xmem = 1; 
+        A_xmem = 0;
+        $fclose(x_file);
+      end
+    #0.5
+      clk = 1'b1;
     for (i=0; i<10 ; i=i+1) begin
       #0.5 clk = 1'b0;
       #0.5 clk = 1'b1;  
