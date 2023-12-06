@@ -408,10 +408,16 @@ initial begin
     #0.5 clk = 1'b1;  
 
 
-    for (t=3; t<len_nij+1; t=t+1) begin  
+    for (t=0; t<len_nij-2; t=t+1) begin  
       #0.5 
         clk = 1'b0;  
-        if (t>0) A_xmem = A_xmem + 1;
+        A_xmem = A_xmem + 1;
+        // if(t>=TODO) begin
+        //   ofifo_rd = 1'b1;
+        //   WEN_pmem = 0;
+        //   CEN_pmem = 0;
+        //   if(t>TODO) A_pmem = A_pmem+1;
+        // end
       #0.5 clk = 1'b1;   
     end
 
