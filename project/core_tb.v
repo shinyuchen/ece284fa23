@@ -242,8 +242,19 @@ initial begin
 
     /////// 1. Kernel data writing to L0 -> Use L0 to horizontally input weight into PEs ///////
     A_wmem = 11'b00000000000;
+    #0.5 clk = 1'b0;  
+      ififo_wr = 1'b1;
+      WEN_wmem = 1;
+      CEN_wmem = 0; 
+      if(kij == 0) begin
+        x_scan_file = $fscanf(x_file,"%32b", D_xmem); 
+        WEN_xmem = 0; 
+        CEN_xmem = 0; 
+        A_xmem = A_xmem + 1;
+      end
 
-    for (t=0; t<col+1; t=t+1) begin  
+    #0.5 clk = 1'b1;  
+    for (t=1; t<col+1; t=t+1) begin  
       #0.5 clk = 1'b0;  
         ififo_wr = 1'b1;
         WEN_wmem = 1;
