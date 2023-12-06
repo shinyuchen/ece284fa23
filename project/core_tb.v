@@ -412,7 +412,7 @@ initial begin
         //   WEN_pmem = 0;
         //   CEN_pmem = 0;
         //   if(t > 2+row+2*col) A_pmem = A_pmem+1;
-        end
+        // end
       #0.5 clk = 1'b1;   
     end
 
