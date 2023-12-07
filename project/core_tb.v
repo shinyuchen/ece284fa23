@@ -380,7 +380,7 @@ initial begin
       end
     #0.5
       clk = 1'b1;
-    for (i=0; i<3 ; i=i+1) begin
+    for (i=0; i<4 ; i=i+1) begin
       #0.5 clk = 1'b0;
       #0.5 clk = 1'b1;  
     end
