@@ -27,16 +27,16 @@ module ofifo (clk, in, out, rd, wr, o_full, reset, o_ready, o_valid);
   assign o_valid = wr_en[col-1];
 
   for (i=0; i<col ; i=i+1) begin : col_num
-      fifo_depth64 #(.bw(psum_bw)) fifo_instance (
-	 .rd_clk(clk),
-	 .wr_clk(clk),
-	 .rd(rd),
-	 .wr(wr_en[i]),
+      fifo #(.WIDTH(psum_bw), .DEPTH(64)) fifo_instance (
+	 .r_clk(clk),
+	 .w_clk(clk),
+	 .i_read(rd),
+	 .i_write(wr_en[i]),
          .o_empty(empty[i]),
          .o_full(full[i]),
-	 .in(in_buffer[(i+1)*psum_bw-1:i*psum_bw]),
-	 .out(out[(i+1)*psum_bw-1:i*psum_bw]),
-         .reset(reset));
+	 .i_data(in_buffer[(i+1)*psum_bw-1:i*psum_bw]),
+	 .o_data(out[(i+1)*psum_bw-1:i*psum_bw]),
+         .rst(reset));
   end
 
 
