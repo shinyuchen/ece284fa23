@@ -253,13 +253,6 @@ initial begin
       #0.5
         clk = 1'b1;
     end
-    for(t=0; t<2*col; t=t+1) begin // refer to W4S2 P.15
-      #0.5 
-        clk = 1'b0;
-        ififo_rd = 1'b0;
-      #0.5
-        clk = 1'b1;
-    end
     /////////////////////////////////////
   
 
@@ -268,26 +261,34 @@ initial begin
     #0.5 
       clk = 1'b0;  
       ififo_rd = 0;
-      load = 0;
     #0.5 
       clk = 1'b1;  
 
-    for (i=0; i<10 ; i=i+1) begin
+    for (i=0; i<20 ; i=i+1) begin
       #0.5 clk = 1'b0;
       #0.5 clk = 1'b1;  
     end
+    #0.5 
+      clk = 1'b0;  
+      load = 0;
+    #0.5 
+      clk = 1'b1;  
     /////////////////////////////////////
 
 
 
     /////// 3. Activation data writing to L0 ///////
-    for (t=0; t<2*len_nij+1; t=t+1) begin  
+    #0.5 
+      clk = 1'b0;  
+      WEN_xmem = 1;  
+      CEN_xmem = 0; 
+    #0.5 
+      clk = 1'b1;   
+    for (t=0; t<2*len_nij; t=t+1) begin  
       #0.5 
         clk = 1'b0;  
         l0_wr = 1;
-        WEN_xmem = 1;  
-        CEN_xmem = 0; 
-        if (t>0) A_xmem = A_xmem + 1;
+        A_xmem = A_xmem + 1;
       #0.5 clk = 1'b1;   
     end
 
