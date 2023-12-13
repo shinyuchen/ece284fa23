@@ -222,7 +222,7 @@ initial begin
       clk = 1'b0;  
       WEN_xmem = 1;
       CEN_xmem = 0; 
-      // ififo_wr = 1;
+      ififo_wr = 1;
     #0.5 
       clk = 1'b1;  
     for (t=0; t<col; t=t+1) begin  
@@ -247,14 +247,15 @@ initial begin
 
 
     /////// 2. Kernel loading to PEs -> sequentially inject weight values into PEs from L0///////
-    #0.5 
-      clk = 1'b0;
-      ififo_rd = 1'b1;
-    #0.5
-      clk = 1'b1;
+    // #0.5 
+    //   clk = 1'b0;
+    //   ififo_rd = 1'b1;
+    // #0.5
+    //   clk = 1'b1;
     for(t=0; t<row+2*col; t=t+1) begin // refer to W4S2 P.15
       #0.5 
         clk = 1'b0;
+        ififo_rd = 1'b1;
         load = 1'b1;
       #0.5
         clk = 1'b1;
