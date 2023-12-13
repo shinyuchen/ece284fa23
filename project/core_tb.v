@@ -222,7 +222,7 @@ initial begin
       clk = 1'b0;  
       WEN_xmem = 1;
       CEN_xmem = 0; 
-      ififo_wr = 1;
+      // ififo_wr = 1;
     #0.5 
       clk = 1'b1;  
     for (t=0; t<col; t=t+1) begin  
@@ -247,11 +247,15 @@ initial begin
 
 
     /////// 2. Kernel loading to PEs -> sequentially inject weight values into PEs from L0///////
-    // #0.5 
-    //   clk = 1'b0;
-    //   ififo_rd = 1'b1;
-    // #0.5
-    //   clk = 1'b1;
+    #0.5 
+      clk = 1'b0;
+      ififo_rd = 1'b1;
+    #0.5
+      clk = 1'b1;
+    #0.5 
+      clk = 1'b0;
+    #0.5
+      clk = 1'b1;
     for(t=0; t<row+2*col; t=t+1) begin // refer to W4S2 P.15
       #0.5 
         clk = 1'b0;
@@ -282,13 +286,16 @@ initial begin
 
 
     /////// 3. Activation data writing to L0 ///////
-    for (t=0; t<len_nij+1; t=t+1) begin  
+    #0.5 
+      clk = 1'b0;  
+      WEN_xmem = 1;  
+      CEN_xmem = 0; 
+    #0.5 clk = 1'b1;   
+    for (t=0; t<len_nij; t=t+1) begin  
       #0.5 
         clk = 1'b0;  
         l0_wr = 1;
-        WEN_xmem = 1;  
-        CEN_xmem = 0; 
-        if (t>0) A_xmem = A_xmem + 1;
+        A_xmem = A_xmem + 1;
       #0.5 clk = 1'b1;   
     end
 
@@ -303,6 +310,15 @@ initial begin
     /////////////////////////////////////
 
     /////// 4. Execution ///////
+    #0.5
+      clk = 1'b0;
+      l0_rd = 1;
+    #0.5
+      clk = 1'b1;
+    #0.5
+      clk = 1'b0;
+    #0.5
+      clk = 1'b1;
     for (t=0; t<len_nij+row+col; t=t+1) begin
       #0.5
         clk = 1'b0;
