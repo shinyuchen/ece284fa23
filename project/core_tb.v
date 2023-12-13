@@ -222,9 +222,10 @@ initial begin
       clk = 1'b0;  
       WEN_xmem = 1;
       CEN_xmem = 0; 
+      ififo_wr = 1;
     #0.5 
       clk = 1'b1;  
-    for (t=0; t<col+1; t=t+1) begin  
+    for (t=0; t<col; t=t+1) begin  
       #0.5 
         clk = 1'b0;  
         ififo_wr = 1'b1;
