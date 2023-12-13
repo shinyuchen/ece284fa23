@@ -273,13 +273,17 @@ initial begin
 
 
     /////// 3. Activation data writing to L0 ///////
-    for (t=0; t<len_nij+1; t=t+1) begin  
+    #0.5 
+      clk = 1'b0; 
+      WEN_xmem = 1;  
+      CEN_xmem = 0; 
+    #0.5 
+      clk = 1'b1;  
+    for (t=0; t<len_nij; t=t+1) begin  
       #0.5 
         clk = 1'b0;  
         l0_wr = 1;
-        WEN_xmem = 1;  
-        CEN_xmem = 0; 
-        if (t>0) A_xmem = A_xmem + 1;
+        A_xmem = A_xmem + 1;
       #0.5 clk = 1'b1;   
     end
 
