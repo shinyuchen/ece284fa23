@@ -14,8 +14,7 @@ module core (clk, inst, ofifo_valid, D_xmem, sfp_out, reset);
     wire [psum_bw*col-1:0] ofifo_out;
     wire [psum_bw*col-1:0] sfp_in;
     wire sfp_i_valid;
-    wire [31:0] weight_SRAM_out;
-    assign l0_in = weight_SRAM_out;
+
     assign l0_rd = (inst[3] || inst[4]);
     assign l0_wr = (inst[2] || inst[5]);
     assign ofifo_rd = inst[6];
@@ -29,10 +28,11 @@ module core (clk, inst, ofifo_valid, D_xmem, sfp_out, reset);
      .sfp_in(sfp_in), .sfp_i_valid(sfp_i_valid), .sfp_out(sfp_out), 
      .ofifo_o_valid(ofifo_o_valid), .ofifo_o_ready(ofifo_o_ready), 
      .ofifo_o_full(ofifo_o_full), .ofifo_out(ofifo_out), .ofifo_rd(ofifo_rd), 
-     .inst(inst[1:0])
+     .inst(inst)
     );
 
-    sram_32b_w2048 weight_SRAM (.CLK(clk), .D(D_xmem), .Q(weight_SRAM_out), .CEN(inst[19]), .WEN(inst[18]), .A(inst[17:7])); 
+    sram_32b_w2048 data_SRAM (.CLK(clk), .D(D_xmem), .Q(l0_in), .CEN(inst[19]), .WEN(inst[18]), .A(inst[17:7])); 
+
     sram_128b_w2048 psum_SRAM (.CLK(clk), .D(ofifo_out), 
                                .Q(sfp_in), 
                                .CEN(inst[32]), .WEN(inst[31]), .A(inst[30:20]));
