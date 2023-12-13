@@ -1,6 +1,6 @@
 // Created by prof. Mingu Kang @VVIP Lab in UCSD ECE department
 // Please do not spread this code without permission 
-module l0 (clk, in, out, rd, wr, o_full, reset, o_ready);
+module l0 (clk, in, out, rd, wr, o_full, reset, o_ready, inst);
 
   parameter row  = 8;
   parameter bw = 4;
@@ -10,6 +10,7 @@ module l0 (clk, in, out, rd, wr, o_full, reset, o_ready);
   input  rd;
   input  reset;
   input  [row*bw-1:0] in;
+  input [1:0] inst;
   output [row*bw-1:0] out;
   output o_full;
   output o_ready;
@@ -17,7 +18,7 @@ module l0 (clk, in, out, rd, wr, o_full, reset, o_ready);
   wire [row-1:0] empty;
   wire [row-1:0] full;
   reg [row-1:0] rd_en;
-  
+  reg counter;
   genvar i;
 
   assign o_ready = !o_full;
@@ -41,10 +42,16 @@ module l0 (clk, in, out, rd, wr, o_full, reset, o_ready);
   always @ (posedge clk) begin
    if (reset) begin
       rd_en <= 8'b00000000;
+      counter <= 0;
    end
    else begin
-      if(rd) rd_en <= {rd_en[row-2:0], 1'b1};
-      else rd_en <= {rd_en[row-2:0], 1'b0};
+      if(rd) begin
+         rd_en <= (inst[1]) ? ((!counter) ? {rd_en[row-2:0], 1'b1} : rd_en) : {rd_en[row-2:0], 1'b1};
+      end
+      else begin
+         rd_en <= (inst[1]) ? ((!counter) ? {rd_en[row-2:0], 1'b0} : rd_en) : {rd_en[row-2:0], 1'b0};
+      end
+      counter <= counter + 1;
    end
   end
 

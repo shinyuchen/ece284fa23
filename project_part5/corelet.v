@@ -46,6 +46,7 @@ l0 L0 (.clk     (clk),
        .wr      (l0_wr), 
        .o_full  (l0_o_full), 
        .reset   (reset), 
+       .inst    (inst[1:0]),
        .o_ready (l0_o_ready)
       );
 
