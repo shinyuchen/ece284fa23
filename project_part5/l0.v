@@ -26,7 +26,7 @@ module l0 (clk, in, out, rd, wr, o_full, reset, o_ready, inst);
 
 
   for (i=0; i<row ; i=i+1) begin : row_num
-      fifo #(.WIDTH(bw), .DEPTH(64)) fifo_instance (
+      fifo #(.WIDTH(bw), .DEPTH(128)) fifo_instance (
 	 .r_clk(clk),
 	 .w_clk(clk),
 	 .i_read(rd_en[i]),
