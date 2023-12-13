@@ -272,7 +272,6 @@ initial begin
     ////// provide some intermission to clear up the kernel loading ///
     #0.5 
       clk = 1'b0;  
-      load = 0; 
       ififo_rd = 0;
     #0.5 
       clk = 1'b1;  
@@ -281,6 +280,11 @@ initial begin
       #0.5 clk = 1'b0;
       #0.5 clk = 1'b1;  
     end
+    #0.5 
+      clk = 1'b0;  
+      load = 0;
+    #0.5 
+      clk = 1'b1;  
     /////////////////////////////////////
 
 
@@ -290,7 +294,8 @@ initial begin
       clk = 1'b0;  
       WEN_xmem = 1;  
       CEN_xmem = 0; 
-    #0.5 clk = 1'b1;   
+    #0.5 
+      clk = 1'b1;   
     for (t=0; t<len_nij; t=t+1) begin  
       #0.5 
         clk = 1'b0;  
@@ -344,13 +349,21 @@ initial begin
     // Ideally, OFIFO should be read while execution, but we have enough ofifo
     // depth so we can fetch out after execution.
     A_pmem = len_nij*kij;
+    #0.5
+      clk = 1'b0;
+      ofifo_rd = 1'b1;
+    #0.5
+      clk = 1'b1;
+    #0.5
+      clk = 1'b0;
+      WEN_pmem = 0;
+      CEN_pmem = 0;
+    #0.5
+      clk = 1'b1;
     for(t=0; t<len_nij; t=t+1) begin
       #0.5
         clk = 1'b0;
-        ofifo_rd = 1'b1;
-        WEN_pmem = 0;
-        CEN_pmem = 0;
-        if(t>0) A_pmem = A_pmem+1;
+        A_pmem = A_pmem+1;
       #0.5
         clk = 1'b1;
     end
