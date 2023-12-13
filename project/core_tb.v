@@ -247,11 +247,6 @@ initial begin
 
 
     /////// 2. Kernel loading to PEs -> sequentially inject weight values into PEs from L0///////
-    #0.5 
-      clk = 1'b0;
-      ififo_rd = 1'b1;
-    #0.5
-      clk = 1'b1;
     for(t=0; t<row+2*col; t=t+1) begin // refer to W4S2 P.15
       #0.5 
         clk = 1'b0;
@@ -311,11 +306,6 @@ initial begin
     /////////////////////////////////////
 
     /////// 4. Execution ///////
-    #0.5
-      clk = 1'b0;
-      l0_rd = 1;
-    #0.5
-      clk = 1'b1;
     for (t=0; t<len_nij+row+col; t=t+1) begin
       #0.5
         clk = 1'b0;
@@ -341,20 +331,12 @@ initial begin
     // Ideally, OFIFO should be read while execution, but we have enough ofifo
     // depth so we can fetch out after execution.
     A_pmem = len_nij*kij;
-    #0.5
-      clk = 1'b0;
-      ofifo_rd = 1'b1;
-    #0.5
-      clk = 1'b1;
-    #0.5
-      clk = 1'b0;
-      WEN_pmem = 0;
-      CEN_pmem = 0;
-    #0.5
-      clk = 1'b1;
     for(t=0; t<len_nij; t=t+1) begin
       #0.5
         clk = 1'b0;
+        ofifo_rd = 1'b1;
+        WEN_pmem = 0;
+        CEN_pmem = 0;
         A_pmem = A_pmem+1;
       #0.5
         clk = 1'b1;
