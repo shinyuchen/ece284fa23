@@ -18,7 +18,7 @@ input [psum_bw*col-1:0] sfp_in;
 input sfp_i_valid;
 output [psum_bw*col-1:0] sfp_out;
 
-input [1:0] inst;
+input [33:0] inst;
 
 wire [row*bw-1:0] l0_out;
 wire [col*psum_bw-1:0] pe_out_s;
@@ -30,16 +30,16 @@ wire ofifo_wr;
 assign pe_in_n = 0;
 assign ofifo_in = pe_out_s;
 assign ofifo_wr = pe_valid[0];
-// reg [1:0] inst_q;
-// always @(posedge clk) begin
-//       inst_q <= (reset) ? 0 : inst[1:0];
-// end
+reg [1:0] inst_q;
+always @(posedge clk) begin
+      inst_q <= (reset) ? 0 : inst[1:0];
+end
 mac_array PE (.clk      (clk), 
               .reset    (reset), 
               .out_s    (pe_out_s), 
               .in_w     (l0_out), 
               .in_n     (pe_in_n), 
-              .inst_w   (inst), 
+              .inst_w   (inst_q[1:0]), 
               .valid    (pe_valid)
              );
 
