@@ -19,6 +19,8 @@ module ofifo (clk, in, out, rd, wr, o_full, reset, o_ready, o_valid);
   wire [col-1:0] empty;
   wire [col-1:0] full;
   reg  [col-1:0] wr_en;
+  reg  [col-1:0] gap_wr;
+  reg counter;
   reg [col*psum_bw-1:0] in_buffer;
   genvar i;
 
@@ -31,7 +33,7 @@ module ofifo (clk, in, out, rd, wr, o_full, reset, o_ready, o_valid);
 	 .r_clk(clk),
 	 .w_clk(clk),
 	 .i_read(rd),
-	 .i_write(wr_en[i]),
+	 .i_write(gap_wr[i]),
          .o_empty(empty[i]),
          .o_full(full[i]),
 	 .i_data(in_buffer[(i+1)*psum_bw-1:i*psum_bw]),
@@ -44,11 +46,15 @@ module ofifo (clk, in, out, rd, wr, o_full, reset, o_ready, o_valid);
     if (reset) begin
       wr_en <= 0;
       in_buffer <= 0;
+      counter <= 0;
+      gap_wr <= 0;
     end
     else begin
       in_buffer <= in;
       if(wr) wr_en <= {wr_en[col-2:0], 1'b1};
       else   wr_en <= {wr_en[col-2:0], 1'b0};
+      gap_wr <= (counter) ? wr_en : 0;
+      counter <= counter + 1;
     end
   end
 
