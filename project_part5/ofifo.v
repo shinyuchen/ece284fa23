@@ -51,8 +51,8 @@ module ofifo (clk, in, out, rd, wr, o_full, reset, o_ready, o_valid);
     end
     else begin
       in_buffer <= in;
-      if(wr) wr_en <= {wr_en[col-2:0], 1'b1};
-      else   wr_en <= {wr_en[col-2:0], 1'b0};
+      if(wr) wr_en <= (counter) ? (wr_en) : {wr_en[col-2:0], 1'b1};
+      else   wr_en <= (counter) ? (wr_en) : {wr_en[col-2:0], 1'b0};
       gap_wr <= (!counter) ? wr_en : 0;
       counter <= counter + 1;
     end
