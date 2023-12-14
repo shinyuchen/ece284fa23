@@ -15,15 +15,11 @@ module mac_row (clk, out_s, in_w, in_n, valid, inst_w, reset);
 
   wire  [(col+1)*bw-1:0] temp;
   wire  [(col+1)*2-1:0] inst_temp;
-  reg counter;
-  always @(posedge clk) begin
-    if(reset) counter <= 0;
-    else counter <= counter + 1;
-  end
+
   assign temp[bw-1:0]   = in_w;
   assign inst_temp[1:0] = inst_w;
-  assign valid = {inst_temp[17] & counter, inst_temp[15] & counter, inst_temp[13] & counter, inst_temp[11] & counter, 
-                  inst_temp[9] & counter,  inst_temp[7] & counter,  inst_temp[5] & counter,  inst_temp[3] & counter};
+  assign valid = {inst_temp[17], inst_temp[15], inst_temp[13], inst_temp[11], 
+                  inst_temp[9],  inst_temp[7],  inst_temp[5],  inst_temp[3]};
   genvar i;
   for (i=1; i < col+1 ; i=i+1) begin : col_num
       mac_tile #(.bw(bw), .psum_bw(psum_bw)) mac_tile_instance (

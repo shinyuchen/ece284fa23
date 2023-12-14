@@ -25,7 +25,7 @@ reg  exe_counter, exe_counter_q;
 assign out_e = a_q;
 assign inst_e = inst_q;
 // assign mac_out_q = mac_out;
-assign out_s = mac_out;
+assign out_s = (exe_counter_q) ? mac_out : out_s;
 mac #(.bw(bw), .psum_bw(psum_bw)) mac_instance (
         .a(a_q), 
         .b(b_q),
