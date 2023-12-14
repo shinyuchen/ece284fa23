@@ -58,7 +58,8 @@ ofifo OFIFO (.clk       (clk),
              .o_full    (ofifo_o_full), 
              .reset     (reset), 
              .o_ready   (ofifo_o_ready), 
-             .o_valid   (ofifo_o_valid)
+             .o_valid   (ofifo_o_valid),
+             .inst(inst[1:0])
             );
 
 sfp_col SFP (.clk    (clk),

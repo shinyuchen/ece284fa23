@@ -1,6 +1,6 @@
 // Created by prof. Mingu Kang @VVIP Lab in UCSD ECE department
 // Please do not spread this code without permission 
-module ofifo (clk, in, out, rd, wr, o_full, reset, o_ready, o_valid);
+module ofifo (clk, in, out, rd, wr, o_full, reset, o_ready, o_valid, inst);
 
   parameter col  = 8;
   parameter bw = 4;
@@ -10,6 +10,7 @@ module ofifo (clk, in, out, rd, wr, o_full, reset, o_ready, o_valid);
   input  wr;
   input  rd;
   input  reset;
+  input [1:0] inst;
   input  [col*psum_bw-1:0] in;
   output [col*psum_bw-1:0] out;
   output o_full;
@@ -33,7 +34,7 @@ module ofifo (clk, in, out, rd, wr, o_full, reset, o_ready, o_valid);
 	 .r_clk(clk),
 	 .w_clk(clk),
 	 .i_read(rd),
-	 .i_write(gap_wr[i]),
+	 .i_write(wr_en[i]),
          .o_empty(empty[i]),
          .o_full(full[i]),
 	 .i_data(in_buffer[(i+1)*psum_bw-1:i*psum_bw]),
@@ -51,9 +52,13 @@ module ofifo (clk, in, out, rd, wr, o_full, reset, o_ready, o_valid);
     end
     else begin
       in_buffer <= in;
-      if(wr) wr_en <= (!counter) ? (wr_en) : {wr_en[col-2:0], 1'b1};
-      else   wr_en <= (!counter) ? (wr_en) : {wr_en[col-2:0], 1'b0};
-      gap_wr <= (!counter) ? wr_en : 0;
+      if(wr) begin
+        wr_en <= (inst[1]) ? {wr_en[col-2:0], counter} : {wr_en[col-2:0], 1'b1};
+      end
+      else begin
+        wr_en <= {wr_en[col-2:0], 1'b0};
+      end
+      // gap_wr <= (!counter) ? wr_en : 0;
       counter <= counter + 1;
     end
   end
